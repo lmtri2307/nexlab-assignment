@@ -1,7 +1,22 @@
-import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginInput } from './use-cases/login.usecase';
 import { Response } from 'express';
+import JwtGuard from './jwt.guard';
+import { Account } from 'src/account/account.entity';
+
+export interface RequestWithUser extends Request {
+  user: Account;
+}
 
 @Controller('auth')
 export class AuthController {
@@ -22,5 +37,11 @@ export class AuthController {
       httpOnly: true,
       sameSite: 'strict',
     });
+  }
+
+  @Get()
+  @UseGuards(JwtGuard)
+  async me(@Req() request: RequestWithUser) {
+    return request.user;
   }
 }
