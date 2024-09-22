@@ -34,7 +34,7 @@ export class Account {
   @Column('varchar', { length: 15, unique: true })
   phone: string;
 
-  @Column('text')
+  @Column('text', { unique: true })
   email: string;
 
   @Column('date')
