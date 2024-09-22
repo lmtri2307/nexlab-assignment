@@ -122,6 +122,12 @@ export class CreateAccountUseCase extends BaseUseCase<
     account.gender = gender;
     account.type = type;
 
-    return await this.notificationRepository.save(account);
+    const savedAccount = await this.notificationRepository.save(account);
+    this.utilsService.mailService.sendMail({
+      to: savedAccount.email,
+      subject: 'Welcome to our platform',
+      body: `http://localhost:3000/verify?token=${savedAccount.id}`,
+    });
+    return savedAccount;
   }
 }

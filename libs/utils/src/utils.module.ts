@@ -1,8 +1,12 @@
+import { MailService } from './mail.service';
 import { Module } from '@nestjs/common';
-import { HashService, UtilsService } from './utils.service';
+import { UtilsService } from './utils.service';
+import { HashService } from './hash.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  providers: [HashService, UtilsService],
+  imports: [ConfigModule.forRoot()],
+  providers: [MailService, HashService, UtilsService],
   exports: [UtilsService],
 })
 export class UtilsModule {}
