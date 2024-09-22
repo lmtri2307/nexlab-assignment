@@ -5,6 +5,9 @@ import { Account } from 'src/account/account.entity';
 import { BaseUseCase } from 'src/base/usecase.base';
 import { Repository } from 'typeorm';
 
+export class VerifyTokenPayload {
+  id: string;
+}
 export class VerifyAccountInput {
   token: string;
 }
@@ -22,7 +25,8 @@ export class VerifyAccountUseCase extends BaseUseCase<
     super();
   }
   async execute({ token }: VerifyAccountInput) {
-    const { id } = this.utilsService.jwtService.verify<{ id: string }>(token);
+    const { id } =
+      this.utilsService.jwtService.verify<VerifyTokenPayload>(token);
     const account = await this.accountRepository.findOne({
       where: { id },
     });
