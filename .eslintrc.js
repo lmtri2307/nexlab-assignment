@@ -21,16 +21,16 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    "prettier/prettier": [
+      "warn",
+      {
+        endOfLine: "auto",
+        semi: true,
+        singleQuote: true,
+        trailingComma: 'all',
+        tabWidth: 2,
+        printWidth: 80,
+      },
+    ],
   },
-  "prettier/prettier": [
-    "warn",
-    {
-      endOfLine: "auto",
-      semi: true,
-      singleQuote: true,
-      trailingComma: 'all',
-      tabWidth: 2,
-      printWidth: 80,
-    },
-  ],
 };
