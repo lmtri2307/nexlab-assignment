@@ -103,14 +103,8 @@ export class CreateAccountUseCase extends BaseUseCase<
       throw new BadRequestException('Freelancer must have address');
     }
 
-    const accountExist = await this.notificationRepository.findOne({
-      where: [{ phone }],
-    });
-    if (accountExist) {
-      throw new BadRequestException(
-        'Account with this phone number already exist',
-      );
-    }
+    await this.verifyPhone(phone);
+    await this.verifyEmail(email);
 
     const account = new Account();
     account.fullName = fullName;
@@ -140,5 +134,25 @@ export class CreateAccountUseCase extends BaseUseCase<
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hashedPassword, ...accountData } = savedAccount;
     return accountData;
+  }
+
+  private async verifyPhone(phone: string) {
+    const accountExist = await this.notificationRepository.findOne({
+      where: [{ phone }],
+    });
+    if (accountExist) {
+      throw new BadRequestException(
+        'Account with this phone number already exist',
+      );
+    }
+  }
+
+  private async verifyEmail(email: string) {
+    const accountExist = await this.notificationRepository.findOne({
+      where: [{ email }],
+    });
+    if (accountExist) {
+      throw new BadRequestException('Account with this email already exist');
+    }
   }
 }

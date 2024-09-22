@@ -22,9 +22,17 @@ export class VerifyAccountUseCase extends BaseUseCase<
   ) {
     super();
   }
+  private async verifyToken(token: string) {
+    try {
+      return this.utilsService.jwtService.verify<VerifyTokenPayload>(token);
+    } catch (error) {
+      throw new BadRequestException('Invalid token');
+    }
+  }
+
   async execute({ token }: VerifyAccountDto) {
-    const { id } =
-      this.utilsService.jwtService.verify<VerifyTokenPayload>(token);
+    const { id } = await this.verifyToken(token);
+
     const account = await this.accountService.findAccountById.execute({ id });
     if (!account) {
       throw new BadRequestException('Invalid token');
