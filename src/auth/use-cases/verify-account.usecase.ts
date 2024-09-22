@@ -1,9 +1,8 @@
 import { UtilsService } from '@app/utils';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Account } from 'src/account/account.entity';
+import { AccountService } from 'src/account/account.service';
 import { BaseUseCase } from 'src/base/usecase.base';
-import { Repository } from 'typeorm';
 
 export class VerifyTokenPayload {
   id: string;
@@ -19,21 +18,18 @@ export class VerifyAccountUseCase extends BaseUseCase<
 > {
   constructor(
     private readonly utilsService: UtilsService,
-    @InjectRepository(Account)
-    private readonly accountRepository: Repository<Account>,
+    private readonly accountService: AccountService,
   ) {
     super();
   }
   async execute({ token }: VerifyAccountDto) {
     const { id } =
       this.utilsService.jwtService.verify<VerifyTokenPayload>(token);
-    const account = await this.accountRepository.findOne({
-      where: { id },
-    });
+    const account = await this.accountService.findAccountById.execute({ id });
     if (!account) {
       throw new BadRequestException('Invalid token');
     }
     account.isVerified = true;
-    return await this.accountRepository.save(account);
+    return await this.accountService.verifyAccount.execute({ account });
   }
 }

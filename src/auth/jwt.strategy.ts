@@ -4,16 +4,13 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AccessTokenPayload } from './use-cases/login.usecase';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Account } from 'src/account/account.entity';
+import { AccountService } from 'src/account/account.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     readonly configService: ConfigService,
-    @InjectRepository(Account)
-    private readonly accountRepository: Repository<Account>,
+    private readonly accountSerice: AccountService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -26,6 +23,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: AccessTokenPayload) {
-    return this.accountRepository.findOne({ where: { id: payload.id } });
+    return this.accountSerice.findAccountById.execute({ id: payload.id });
   }
 }
