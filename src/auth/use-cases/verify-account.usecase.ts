@@ -8,13 +8,13 @@ import { Repository } from 'typeorm';
 export class VerifyTokenPayload {
   id: string;
 }
-export class VerifyAccountInput {
+export class VerifyAccountDto {
   token: string;
 }
 
 @Injectable()
 export class VerifyAccountUseCase extends BaseUseCase<
-  VerifyAccountInput,
+  VerifyAccountDto,
   Account
 > {
   constructor(
@@ -24,7 +24,7 @@ export class VerifyAccountUseCase extends BaseUseCase<
   ) {
     super();
   }
-  async execute({ token }: VerifyAccountInput) {
+  async execute({ token }: VerifyAccountDto) {
     const { id } =
       this.utilsService.jwtService.verify<VerifyTokenPayload>(token);
     const account = await this.accountRepository.findOne({

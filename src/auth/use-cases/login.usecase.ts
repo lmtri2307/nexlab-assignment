@@ -11,7 +11,7 @@ export class AccessTokenPayload {
   role: Account['type'];
 }
 
-export class LoginInput {
+export class LoginDto {
   @IsOptional()
   @IsEmail()
   email?: string;
@@ -29,7 +29,7 @@ export class LoginOutput {
 }
 
 @Injectable()
-export class LoginUseCase extends BaseUseCase<LoginInput, LoginOutput> {
+export class LoginUseCase extends BaseUseCase<LoginDto, LoginOutput> {
   constructor(
     @InjectRepository(Account)
     private readonly accountRepository: Repository<Account>,
@@ -87,7 +87,7 @@ export class LoginUseCase extends BaseUseCase<LoginInput, LoginOutput> {
     return this.utilsService.jwtService.sign(payload);
   }
 
-  async execute({ email, phone, password }: LoginInput) {
+  async execute({ email, phone, password }: LoginDto) {
     if (email) {
       return this.loginByEmailOrPhone({
         field: 'email',

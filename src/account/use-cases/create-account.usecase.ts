@@ -15,7 +15,7 @@ import {
 import { UtilsService } from '@app/utils';
 import { VerifyTokenPayload } from 'src/auth/use-cases/verify-account.usecase';
 
-class AddressInput {
+class AddressDto {
   @IsString()
   houseNumber: string;
 
@@ -32,7 +32,7 @@ class AddressInput {
   city: string;
 }
 
-export class CreateAccountInput {
+export class CreateAccountDto {
   @IsString()
   fullName: string;
 
@@ -56,7 +56,7 @@ export class CreateAccountInput {
   gender: Gender;
 
   @IsOptional()
-  address?: AddressInput;
+  address?: AddressDto;
 
   @IsEnum(AccountType, { message: 'Invalid Account Type' })
   type: AccountType;
@@ -64,7 +64,7 @@ export class CreateAccountInput {
 
 @Injectable()
 export class CreateAccountUseCase extends BaseUseCase<
-  CreateAccountInput,
+  CreateAccountDto,
   Account
 > {
   constructor(
@@ -98,7 +98,7 @@ export class CreateAccountUseCase extends BaseUseCase<
     gender,
     type,
     address,
-  }: CreateAccountInput) {
+  }: CreateAccountDto) {
     if (type === AccountType.FREELANCER && !address) {
       throw new BadRequestException('Freelancer must have address');
     }

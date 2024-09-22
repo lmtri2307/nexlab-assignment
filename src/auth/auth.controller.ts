@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginInput } from './use-cases/login.usecase';
+import { LoginDto } from './use-cases/login.usecase';
 import { Response } from 'express';
 import JwtGuard from './jwt.guard';
 import { Account } from 'src/account/account.entity';
@@ -29,7 +29,7 @@ export class AuthController {
 
   @Post('login')
   async login(
-    @Body() input: LoginInput,
+    @Body() input: LoginDto,
     @Res({ passthrough: true }) response: Response,
   ) {
     const { accessToken } = await this.authService.loginUseCase.execute(input);
