@@ -5,9 +5,10 @@ import { CreateAccountUseCase } from './use-cases/create-account.usecase';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account } from './account.entity';
 import { AddressModule } from 'src/address/address.module';
+import { UtilsModule } from '@app/utils';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Account]), AddressModule],
+  imports: [UtilsModule, TypeOrmModule.forFeature([Account]), AddressModule],
   controllers: [AccountController],
   providers: [AccountService, CreateAccountUseCase],
 })

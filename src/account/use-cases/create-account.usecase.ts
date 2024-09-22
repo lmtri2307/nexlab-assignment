@@ -12,6 +12,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
+import { UtilsService } from '@app/utils';
 
 class AddressInput {
   @IsString()
@@ -70,6 +71,7 @@ export class CreateAccountUseCase extends BaseUseCase<
     private readonly notificationRepository: Repository<Account>,
     @InjectRepository(Address)
     private readonly addressRepository: Repository<Address>,
+    private readonly utilsService: UtilsService,
   ) {
     super();
   }
@@ -101,7 +103,8 @@ export class CreateAccountUseCase extends BaseUseCase<
     const account = new Account();
     account.fullName = fullName;
     account.phone = phone;
-    account.hashedPassword = password;
+    account.hashedPassword =
+      await this.utilsService.hashService.hashPassword(password);
     account.email = email;
     account.dob = dob;
     account.avatarUrl = avatarUrl;
