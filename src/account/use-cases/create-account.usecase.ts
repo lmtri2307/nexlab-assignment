@@ -76,6 +76,16 @@ export class CreateAccountUseCase extends BaseUseCase<
     super();
   }
 
+  private async sendVerificationEmail(account: Account) {
+    const token = this.utilsService.jwtService.sign({ id: account.id });
+    const url = `http://localhost:3000/verify?token=${token}`;
+    this.utilsService.mailService.sendMail({
+      to: account.email,
+      subject: 'Welcome to our platform',
+      body: `Click ${url} to verify your account`,
+    });
+  }
+
   async execute({
     fullName,
     phone,
@@ -123,11 +133,7 @@ export class CreateAccountUseCase extends BaseUseCase<
     account.type = type;
 
     const savedAccount = await this.notificationRepository.save(account);
-    this.utilsService.mailService.sendMail({
-      to: savedAccount.email,
-      subject: 'Welcome to our platform',
-      body: `http://localhost:3000/verify?token=${savedAccount.id}`,
-    });
+    await this.sendVerificationEmail(savedAccount);
     return savedAccount;
   }
 }
