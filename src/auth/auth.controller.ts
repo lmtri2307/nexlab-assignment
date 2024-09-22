@@ -15,7 +15,7 @@ import JwtGuard from './jwt.guard';
 import { Account } from 'src/account/account.entity';
 
 export interface RequestWithUser extends Request {
-  user: Account;
+  user: Omit<Account, 'hashedPassword'>;
 }
 
 @Controller('auth')

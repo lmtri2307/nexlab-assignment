@@ -23,6 +23,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: AccessTokenPayload) {
-    return this.accountSerice.findAccountById.execute({ id: payload.id });
+    const account = await this.accountSerice.findAccountById.execute({
+      id: payload.id,
+    });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { hashedPassword, ...result } = account;
+    return result;
   }
 }

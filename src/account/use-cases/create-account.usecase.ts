@@ -65,7 +65,7 @@ export class CreateAccountDto {
 @Injectable()
 export class CreateAccountUseCase extends BaseUseCase<
   CreateAccountDto,
-  Account
+  Omit<Account, 'hashedPassword'>
 > {
   constructor(
     @InjectRepository(Account)
@@ -136,6 +136,9 @@ export class CreateAccountUseCase extends BaseUseCase<
 
     const savedAccount = await this.notificationRepository.save(account);
     await this.sendVerificationEmail(savedAccount);
-    return savedAccount;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { hashedPassword, ...accountData } = savedAccount;
+    return accountData;
   }
 }

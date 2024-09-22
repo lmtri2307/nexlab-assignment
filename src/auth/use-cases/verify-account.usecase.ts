@@ -14,7 +14,7 @@ export class VerifyAccountDto {
 @Injectable()
 export class VerifyAccountUseCase extends BaseUseCase<
   VerifyAccountDto,
-  Account
+  Omit<Account, 'hashedPassword'>
 > {
   constructor(
     private readonly utilsService: UtilsService,
@@ -29,7 +29,12 @@ export class VerifyAccountUseCase extends BaseUseCase<
     if (!account) {
       throw new BadRequestException('Invalid token');
     }
-    account.isVerified = true;
-    return await this.accountService.verifyAccount.execute({ account });
+
+    const savedAccount = await this.accountService.verifyAccount.execute({
+      account,
+    });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { hashedPassword, ...result } = savedAccount;
+    return result;
   }
 }
