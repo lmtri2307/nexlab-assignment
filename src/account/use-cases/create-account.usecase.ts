@@ -78,7 +78,7 @@ export class CreateAccountUseCase extends BaseUseCase<
 
   private async sendVerificationEmail(account: Account) {
     const token = this.utilsService.jwtService.sign({ id: account.id });
-    const url = `http://localhost:3000/verify?token=${token}`;
+    const url = `http://localhost:3000/auth/verify?token=${token}`;
     this.utilsService.mailService.sendMail({
       to: account.email,
       subject: 'Welcome to our platform',

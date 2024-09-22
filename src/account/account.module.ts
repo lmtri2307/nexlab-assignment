@@ -11,5 +11,6 @@ import { UtilsModule } from '@app/utils';
   imports: [UtilsModule, TypeOrmModule.forFeature([Account]), AddressModule],
   controllers: [AccountController],
   providers: [AccountService, CreateAccountUseCase],
+  exports: [TypeOrmModule],
 })
 export class AccountModule {}
